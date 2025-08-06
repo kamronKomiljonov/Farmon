@@ -1,0 +1,11 @@
+name: Farmon
+version: 1.0
+main: uz.pyksel.farmon.Farmon
+api-version: 1.13
+author: Pyksel
+website: https://pyksel.uz
+commands:
+  farmon:
+    description: Farmon pluginining buyruqlari
+    usage: /farmon reload
+    permission: farmon.reload

@@ -1,0 +1,8 @@
+# Farmon plugin konfiguratsiyasi
+
+interval: 300
+
+messages:
+  - "&aFarmon serveriga xush kelibsiz!"
+  - "&bHar kuni yangi yangiliklar bizda!"
+  - "&eDo'stlaringizni ham taklif qiling!"
