@@ -3,9 +3,9 @@ version: 1.0
 main: uz.pyksel.farmon.Farmon
 api-version: 1.13
 author: Pyksel
-website: https://pyksel.uz
+description: A plugin that manages the command system on the server
 commands:
   farmon:
-    description: Farmon pluginining buyruqlari
+    description: Reload command
     usage: /farmon reload
     permission: farmon.reload
