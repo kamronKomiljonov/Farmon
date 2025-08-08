@@ -21,6 +21,7 @@ public class Farmon extends JavaPlugin {
     private int interval;
     private int currentIndex = 0;
     private BukkitTask broadcastTask;
+    private String language;
 
     private final List<Sound> soundList = Arrays.asList(
             Sound.BLOCK_NOTE_BLOCK_PLING,
@@ -35,7 +36,7 @@ public class Farmon extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-
+        loadLanguage();
         sendStartupMessage();
         loadMessagesFromConfig();
         startMessageBroadcaster();
@@ -44,38 +45,58 @@ public class Farmon extends JavaPlugin {
     @Override
     public void onDisable() {
         if (broadcastTask != null) broadcastTask.cancel();
-        Bukkit.getConsoleSender().sendMessage("§c[Farmon] Plugin o‘chirildi.");
+        if (language.equalsIgnoreCase("uzbek")) {
+            Bukkit.getConsoleSender().sendMessage("§c[Farmon] Plugin o‘chirildi.");
+        } else {
+            Bukkit.getConsoleSender().sendMessage("§c[Farmon] Plugin disabled.");
+        }
     }
 
     public static Farmon getInstance() {
         return instance;
     }
 
+    private void loadLanguage() {
+        language = getConfig().getString("language", "english").toLowerCase();
+    }
+
     private void sendStartupMessage() {
         Bukkit.getConsoleSender().sendMessage("§8----------------------------------------");
-        Bukkit.getConsoleSender().sendMessage("§aFarmon Plugin Yoqildi!");
-        Bukkit.getConsoleSender().sendMessage("§7Muallif: §bPyksel");
-        Bukkit.getConsoleSender().sendMessage("§7Versiya: §e" + getDescription().getVersion());
-        Bukkit.getConsoleSender().sendMessage("§7Sayt: §dhttps://pyksel.uz");
+        if (language.equalsIgnoreCase("uzbek")) {
+            Bukkit.getConsoleSender().sendMessage("§aFarmon plagin yoqildi!");
+            Bukkit.getConsoleSender().sendMessage("§7Muallif: §bPyksel");
+            Bukkit.getConsoleSender().sendMessage("§7Versiya: §e" + getDescription().getVersion());
+            Bukkit.getConsoleSender().sendMessage("§7Sayt: §dhttps://pyksel.uz");
+        } else {
+            Bukkit.getConsoleSender().sendMessage("§aFarmon plugin enabled!");
+            Bukkit.getConsoleSender().sendMessage("§7Author: §bPyksel");
+            Bukkit.getConsoleSender().sendMessage("§7Version: §e" + getDescription().getVersion());
+            Bukkit.getConsoleSender().sendMessage("§7Website: §dhttps://pyksel.uz");
+        }
         Bukkit.getConsoleSender().sendMessage("§8----------------------------------------");
     }
 
     private void loadMessagesFromConfig() {
         FileConfiguration config = getConfig();
-
-        // Xabarlar
         messages = config.getStringList("messages");
         if (messages == null || messages.isEmpty()) {
-            Bukkit.getConsoleSender().sendMessage("§c[Farmon] config.yml da 'messages' topilmadi yoki bo‘sh.");
+            if (language.equalsIgnoreCase("uzbek")) {
+                Bukkit.getConsoleSender().sendMessage("§c[Farmon] config.yml da 'messages' topilmadi yoki bo‘sh.");
+            } else {
+                Bukkit.getConsoleSender().sendMessage("§c[Farmon] 'messages' not found or empty in config.yml.");
+            }
         }
 
-        // Interval
         String intervalStr = config.getString("interval");
         try {
             interval = Integer.parseInt(intervalStr);
             if (interval <= 0) throw new NumberFormatException();
         } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage("§c[Farmon] 'interval' noto‘g‘ri yoki musbat raqam emas. Default: 300s");
+            if (language.equalsIgnoreCase("uzbek")) {
+                Bukkit.getConsoleSender().sendMessage("§c[Farmon] 'interval' noto‘g‘ri yoki musbat raqam emas. Default: 300s");
+            } else {
+                Bukkit.getConsoleSender().sendMessage("§c[Farmon] 'interval' is invalid or not positive. Default: 300s");
+            }
             interval = 300;
         }
     }
@@ -100,19 +121,28 @@ public class Farmon extends JavaPlugin {
         }, 0L, interval * 20L);
     }
 
-    // /farmon reload komandasi
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!label.equalsIgnoreCase("farmon")) return false;
 
         if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
             reloadConfig();
+            loadLanguage();
             loadMessagesFromConfig();
             startMessageBroadcaster();
-            sender.sendMessage("§a[Farmon] Konfiguratsiya qayta yuklandi!");
+            if (language.equalsIgnoreCase("uzbek")) {
+                sender.sendMessage("§a[Farmon] Konfiguratsiya qayta yuklandi!");
+            } else {
+                sender.sendMessage("§a[Farmon] Configuration reloaded!");
+            }
         } else {
-            sender.sendMessage("§eFarmon plugin komandasi:");
-            sender.sendMessage("§6/farmon reload §7- config.yml ni qayta yuklaydi");
+            if (language.equalsIgnoreCase("uzbek")) {
+                sender.sendMessage("§eFarmon plugin komandasi:");
+                sender.sendMessage("§6/farmon reload §7- config.yml ni qayta yuklaydi");
+            } else {
+                sender.sendMessage("§eFarmon plugin commands:");
+                sender.sendMessage("§6/farmon reload §7- reloads config.yml");
+            }
         }
         return true;
     }
