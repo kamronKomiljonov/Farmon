@@ -1,8 +1,11 @@
-# Farmon plugin konfiguratsiyasi
+# Language: uzbek / english
+language: english
 
+# Broadcast interval in seconds
 interval: 300
 
+# Messages to broadcast
 messages:
-  - "&aFarmon serveriga xush kelibsiz!"
-  - "&bHar kuni yangi yangiliklar bizda!"
-  - "&eDo'stlaringizni ham taklif qiling!"
+  - "&aWelcome to the Farmon server!"
+  - "&bWe have daily updates!"
+  - "&eInvite your friends to join!"
